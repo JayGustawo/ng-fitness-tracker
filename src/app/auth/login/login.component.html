@@ -1,0 +1,26 @@
+<section class="login-form">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input
+        type="email"
+        matInput
+        placeholder="Enter email"
+        formControlName="loginEmail"
+      />
+      <mat-hint>Please enter your email.</mat-hint>
+      <mat-error>Invalid or missing email.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        type="password"
+        matInput
+        placeholder="Your password"
+        formControlName="loginPassword"
+      />
+      <mat-error>Invalid or missing password.</mat-error>
+    </mat-form-field>
+    <button type="submit" mat-stroked-button [disabled]="loginForm.invalid">
+      Login
+    </button>
+  </form>
+</section>

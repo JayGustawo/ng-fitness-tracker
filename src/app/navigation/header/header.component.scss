@@ -1,0 +1,42 @@
+mat-toolbar {
+  display: flex;
+  align-items: center;
+  height: 4rem; // or the height you are using for your toolbar
+  padding: 0 1rem;
+}
+
+.header-logo {
+  height: 100%; // Adjust this to be less than or equal to the toolbar height
+  margin-right: 1rem; // Optional: Space between the logo and the title
+  align-content: center;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover,
+a:active {
+  color: lightgray;
+}
+
+.app-title {
+  flex: 1; // Ensures the title takes up available space
+}
+
+.spacer {
+  flex: 1 1 auto; // Ensures the spacer takes up available space
+}
+
+.navigation-items {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    margin-left: 16px;
+    cursor: pointer;
+  }
+}
