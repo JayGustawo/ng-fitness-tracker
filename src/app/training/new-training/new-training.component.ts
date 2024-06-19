@@ -14,12 +14,20 @@ import { NgForm } from '@angular/forms';
 })
 export class NewTrainingComponent implements OnInit {
   exercises: Exercise[] = [];
+
   constructor(private trainingService: TrainingService) {}
+
   ngOnInit(): void {
-    this.exercises = this.trainingService.availableExercises;
+    this.trainingService.availableExercisesChanged.subscribe(
+      (exercises: Exercise[]) => {
+        this.exercises = exercises;
+      }
+    );
   }
 
-  onStartTraining(form:NgForm){    
+  onStartTraining(form: NgForm) {
+    console.log(form.value);
+    
     this.trainingService.startExercise(form.value.exerciseName);
   }
 }

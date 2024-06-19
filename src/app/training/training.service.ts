@@ -1,21 +1,22 @@
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Exercise } from './exercise.model';
 import { Injectable } from '@angular/core';
+import { FirestoreService } from '../firestore.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TrainingService {
   exerciseChanged = new Subject<Exercise | null>();
-  private _availableExercises: Exercise[] = [
-    { id: 'crunches', name: 'Crunches', duration: 5, calories: 8 },
-    { id: 'touch-toes', name: 'Touch Toes', duration: 10, calories: 15 },
-    { id: 'side-lunges', name: 'Side Lunges', duration: 12, calories: 18 },
-    { id: 'burpees', name: 'Burpees', duration: 8, calories: 8 },
-  ];
+  availableExercisesChanged = new BehaviorSubject<Exercise[]>([]);
 
+  private _availableExercises: Exercise[] = [];
   private runningExercise: Exercise | undefined | null;
   private exercises: Exercise[] = [];
+
+  constructor(private firestoreService: FirestoreService) {
+    this.fetchAvailableExercises();
+  }
 
   getRunningExercise() {
     return { ...this.runningExercise };
@@ -26,18 +27,23 @@ export class TrainingService {
   }
   public set availableExercises(value: Exercise[]) {
     this._availableExercises = value;
+    this.availableExercisesChanged.next([...this._availableExercises]);
   }
 
-  startExercise(selectedId: string) {
+  fetchAvailableExercises() {
+    this.firestoreService.getExercises().subscribe((exercises: Exercise[]) => {
+      this.availableExercises = exercises;
+    });
+  }
+
+  startExercise(exerciseName: string) {
     const selectedExercise = this.availableExercises.find(
-      (element) => element.id === selectedId
+      (element) => element.name === exerciseName
     );
-    console.log(selectedExercise);
 
     if (selectedExercise) {
       this.runningExercise = selectedExercise;
       this.exerciseChanged.next({ ...this.runningExercise });
-      console.log(this.runningExercise);
     }
   }
 
