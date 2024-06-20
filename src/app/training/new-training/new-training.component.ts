@@ -4,6 +4,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { TrainingService } from '../training.service';
 import { Exercise } from '../exercise.model';
 import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-new-training',
@@ -13,21 +14,23 @@ import { NgForm } from '@angular/forms';
   styleUrl: './new-training.component.scss',
 })
 export class NewTrainingComponent implements OnInit {
-  exercises: Exercise[] = [];
+  exercises!: Observable<Exercise[]>;
 
   constructor(private trainingService: TrainingService) {}
 
   ngOnInit(): void {
-    this.trainingService.availableExercisesChanged.subscribe(
-      (exercises: Exercise[]) => {
-        this.exercises = exercises;
-      }
-    );
+    this.exercises = this.trainingService.availableExercisesChanged;
+    // *** Alternative ***
+    // this.trainingService.availableExercisesChanged.subscribe(
+    //   (exercises: Exercise[]) => {
+    //     this.exercises = exercises;
+    //   }
+    // );
   }
 
   onStartTraining(form: NgForm) {
     console.log(form.value);
-    
+
     this.trainingService.startExercise(form.value.exerciseName);
   }
 }
